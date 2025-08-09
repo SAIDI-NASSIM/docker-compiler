@@ -92,8 +92,53 @@ select_language() {
 # Project path input
 get_project_path() {
     print_step "Project Location"
-    echo -n -e "${YELLOW}Enter path to your project: ${NC}"
-    read -r PROJECT_PATH
+    
+    # Ask if user wants to use file explorer to browse
+    echo "How would you like to specify your project path?"
+    echo "  1) Type the path manually"
+    echo "  2) Open file explorer to browse and copy path"
+    echo
+    
+    local choice
+    while true; do
+        echo -n -e "${YELLOW}Select option (1 or 2): ${NC}"
+        read -r choice
+        
+        case $choice in
+            1)
+                echo
+                echo -n -e "${YELLOW}Enter path to your project: ${NC}"
+                read -r PROJECT_PATH
+                break
+                ;;
+            2)
+                echo
+                print_info "Opening file explorer..."
+                print_info "Instructions:"
+                print_info "  1. Navigate to your project folder in the file explorer"
+                print_info "  2. Press Ctrl+L to show the address bar"
+                print_info "  3. Copy the path (Ctrl+C)"
+                print_info "  4. Come back here and paste it"
+                echo
+                
+                # Open file explorer in current directory
+                if command -v open > /dev/null; then
+                    open . 2>/dev/null &
+                elif command -v xdg-open > /dev/null; then
+                    xdg-open . 2>/dev/null &
+                else
+                    print_warn "Could not detect file manager. Please open your file explorer manually."
+                fi
+                
+                echo -n -e "${YELLOW}Paste your project path here: ${NC}"
+                read -r PROJECT_PATH
+                break
+                ;;
+            *)
+                print_error "Invalid choice. Please enter 1 or 2"
+                ;;
+        esac
+    done
     
     # Clean up path
     PROJECT_PATH=$(clean_path "$PROJECT_PATH")

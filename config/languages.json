@@ -31,7 +31,7 @@
     "c": {
       "name": "C",
       "extensions": [".c", ".h"],
-      "docker_image": "gcc:alpine",
+      "docker_image": "gcc:bookworm",
       "detection": {
         "required_files": ["*.c"],
         "optional_files": ["Makefile", "*.h"]
