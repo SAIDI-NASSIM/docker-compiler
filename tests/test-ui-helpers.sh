@@ -1,19 +1,13 @@
 #!/bin/bash
 
-# Test script for ui-helpers.sh functions
-# Standardized sourcing pattern for tests
-
-# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Source only what we need for this test
 source "$SCRIPT_DIR/utils/ui-helpers.sh"
 
 print_header
 print_info "Testing UI helper functions..."
 echo
 
-# Test all print functions with visual output
 print_step "Testing all print functions"
 print_success "This is a success message"
 print_error "This is an error message" 
@@ -21,14 +15,12 @@ print_warning "This is a warning message"
 print_info "This is an info message"
 echo
 
-# Test output sections
 print_step "Testing output sections"
 print_output_header
 echo "Sample program output here"
 print_output_footer
 echo
 
-# Test function existence thoroughly
 print_step "Testing function availability"
 functions_to_test="print_header print_step print_success print_error print_warning print_info ask_yes_no print_output_header print_output_footer"
 
@@ -50,7 +42,6 @@ else
     exit 1
 fi
 
-# Test color variables
 print_step "Testing color variables"
 color_vars="RED GREEN YELLOW BLUE CYAN PURPLE NC"
 colors_exist=true
@@ -63,6 +54,15 @@ for var in $color_vars; do
     fi
 done
 
+if $colors_exist; then
+    print_success "All color variables are defined"
+else
+    print_error "Some color variables are missing"
+    exit 1
+fi
+
+print_info "Note: ask_yes_no function requires manual testing with user input"
+print_success "UI helper tests completed successfully"
 if $colors_exist; then
     print_success "All color variables are defined"
 else

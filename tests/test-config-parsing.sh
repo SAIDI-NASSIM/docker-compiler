@@ -1,16 +1,11 @@
 #!/bin/bash
 
-# Test script for config-loader.sh JSON parsing functionality
-# Standardized sourcing pattern for tests
-
-# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 echo "=== Testing Configuration Parsing ==="
 echo "Using SCRIPT_DIR: $SCRIPT_DIR"
 echo
 
-# Check if config file exists and source config loader
 config_file="$SCRIPT_DIR/config/languages.json"
 if [[ ! -f "$config_file" ]]; then
     echo "ERROR: Configuration file not found at $config_file"
@@ -20,7 +15,6 @@ fi
 
 echo "✓ Configuration file found: $config_file"
 
-# Source config loader (no need to export SCRIPT_DIR, it's already set)
 if [[ -f "$SCRIPT_DIR/utils/config-loader.sh" ]]; then
     source "$SCRIPT_DIR/utils/config-loader.sh"
 else
@@ -28,13 +22,11 @@ else
     exit 1
 fi
 
-# Display actual JSON structure for verification
 echo
 echo "JSON file structure preview:"
 head -20 "$config_file" | sed 's/^/  /'
 echo
 
-# Test jq availability
 echo "Testing jq availability..."
 if check_jq; then
     echo "✓ jq is available"
@@ -45,7 +37,6 @@ else
     exit 1
 fi
 
-# Test JSON validation
 echo
 echo "Testing JSON file validation..."
 if jq empty "$config_file" 2>/dev/null; then
@@ -55,7 +46,6 @@ else
     exit 1
 fi
 
-# Test loading configurations
 echo
 echo "Loading configurations..."
 if load_configurations; then
@@ -65,7 +55,6 @@ else
     exit 1
 fi
 
-# Test available languages
 echo
 echo "Testing available languages..."
 available_langs=$(get_available_languages)
@@ -78,7 +67,6 @@ else
     exit 1
 fi
 
-# Test language details for each language
 echo
 echo "Testing language details..."
 for lang in $available_langs; do
@@ -94,7 +82,6 @@ for lang in $available_langs; do
     echo "  Docker Image: ${docker_image:-'(missing)'}"
     echo "  Run Command: ${run_cmd:-'(missing)'}"
     
-    # Validate required fields
     if [[ -z "$name" || -z "$extensions" || -z "$docker_image" ]]; then
         echo "✗ Missing required fields for $lang"
         exit 1
@@ -102,7 +89,6 @@ for lang in $available_langs; do
     echo
 done
 
-# Test build systems
 echo "Testing build systems..."
 for lang in $available_langs; do
     echo "Language: $lang"
@@ -141,7 +127,6 @@ for lang in $available_langs; do
     echo
 done
 
-# Test error cases
 echo "Testing error cases..."
 nonexistent_name=$(get_language_name "nonexistent")
 if [[ -z "$nonexistent_name" ]]; then
@@ -156,7 +141,6 @@ else
     echo "✓ Non-existent build system returns false"
 fi
 
-# Add test to verify JSON structure matches expectations
 echo "Testing JSON structure..."
 if jq -e '.languages' "$config_file" >/dev/null 2>&1; then
     echo "✓ JSON has 'languages' key"
@@ -165,7 +149,6 @@ else
     exit 1
 fi
 
-# Test that each language has required fields
 for lang in $available_langs; do
     echo "Validating structure for $lang..."
     

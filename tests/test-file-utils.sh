@@ -1,16 +1,10 @@
 #!/bin/bash
 
-# Test script for file-utils.sh functions
-# Standardized sourcing pattern for tests
-
-# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Source dependencies in order
 source "$SCRIPT_DIR/utils/ui-helpers.sh"
 source "$SCRIPT_DIR/utils/file-utils.sh"
 
-# Create temporary test directory
 TEST_DIR=$(mktemp -d)
 trap 'rm -rf "$TEST_DIR"' EXIT
 
@@ -19,7 +13,6 @@ print_info "Testing file utility functions..."
 print_info "Test directory: $TEST_DIR"
 echo
 
-# Setup comprehensive test structure
 mkdir -p "$TEST_DIR/testdir"
 mkdir -p "$TEST_DIR/empty"
 touch "$TEST_DIR/testdir/test.go"
@@ -28,7 +21,6 @@ touch "$TEST_DIR/testdir/test.c"
 touch "$TEST_DIR/testdir/Makefile"
 touch "$TEST_DIR/testdir/main.py"
 
-# Test validate_directory extensively
 print_step "Testing validate_directory"
 if validate_directory "$SCRIPT_DIR"; then
     print_success "validate_directory with existing directory works"
@@ -49,7 +41,6 @@ else
 fi
 echo
 
-# Test clean_path with multiple cases
 print_step "Testing clean_path"
 test_cases=(
     '"/test/path/":/test/path'
@@ -71,7 +62,6 @@ for case in "${test_cases[@]}"; do
 done
 echo
 
-# Test get_absolute_path
 print_step "Testing get_absolute_path"
 abs_path=$(get_absolute_path "/usr/bin")
 if [[ "$abs_path" == "/usr/bin" ]]; then
@@ -89,7 +79,6 @@ else
 fi
 echo
 
-# Test has_file extensively
 print_step "Testing has_file"
 if has_file "$TEST_DIR/testdir" "test.go"; then
     print_success "has_file correctly finds existing file"
@@ -116,7 +105,6 @@ else
 fi
 echo
 
-# Test has_files_with_extensions extensively
 print_step "Testing has_files_with_extensions"
 if has_files_with_extensions "$TEST_DIR/testdir" ".go .rs"; then
     print_success "has_files_with_extensions finds existing extensions"

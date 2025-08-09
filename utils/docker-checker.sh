@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Note: ui-helpers.sh is sourced by main.sh before this file
-# No need to source it again here
-
-# Main Docker system check
 check_docker_system() {
     print_step "Checking Docker system..."
     
@@ -14,7 +10,6 @@ check_docker_system() {
     echo
 }
 
-# Check if Docker is installed
 check_docker_installation() {
     if ! command -v docker &> /dev/null; then
         print_error "Docker is not installed!"
@@ -28,7 +23,6 @@ check_docker_installation() {
     print_success "Docker is installed"
 }
 
-# Check if Docker daemon is running
 check_docker_daemon() {
     if ! docker info &> /dev/null; then
         print_error "Docker daemon is not running!"

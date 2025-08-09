@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Note: This file is sourced by main.sh after all utilities are loaded
-# All utility functions and variables are available
-
 # Compile Go project
 compile_only() {
     local project_path="$1"

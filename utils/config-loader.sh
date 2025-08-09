@@ -1,14 +1,10 @@
 #!/bin/bash
 
-# Self-sufficient config loader
-# Note: SCRIPT_DIR is set by main.sh before sourcing this file
-
 declare -A LANGUAGES
 declare -A LANGUAGE_NAMES
 declare -A LANGUAGE_EXTENSIONS
 declare -A LANGUAGE_DOCKER_IMAGES
 
-# Check if jq is installed
 check_jq() {
     if ! command -v jq &> /dev/null; then
         echo "ERROR: jq is required but not installed. Please install jq to continue." >&2
@@ -16,7 +12,6 @@ check_jq() {
     fi
 }
 
-# Load language configurations
 load_configurations() {
     local config_dir="$SCRIPT_DIR/config"
     local languages_file="$config_dir/languages.json"
@@ -38,7 +33,6 @@ load_configurations() {
     extract_language_configs "$languages_file"
 }
 
-# Extract language configurations into arrays using jq
 extract_language_configs() {
     local config_file="$1"
     
@@ -59,36 +53,31 @@ extract_language_configs() {
         
         local extensions
         extensions=$(jq -r ".languages.${lang_key}.extensions[]" "$config_file" 2>/dev/null | tr '\n' ' ')
-        LANGUAGE_EXTENSIONS["$lang_key"]="${extensions% }"  # Remove trailing space
+        LANGUAGE_EXTENSIONS["$lang_key"]="${extensions% }"
         
         LANGUAGE_DOCKER_IMAGES["$lang_key"]=$(jq -r ".languages.${lang_key}.docker_image" "$config_file")
     done <<< "$lang_keys"
 }
 
-# Get list of available languages
 get_available_languages() {
     echo "${!LANGUAGES[@]}"
 }
 
-# Get language display name
 get_language_name() {
     local lang="$1"
     echo "${LANGUAGE_NAMES[$lang]}"
 }
 
-# Get language file extensions
 get_language_extensions() {
     local lang="$1"
     echo "${LANGUAGE_EXTENSIONS[$lang]}"
 }
 
-# Get language Docker image
 get_language_docker_image() {
     local lang="$1"
     echo "${LANGUAGE_DOCKER_IMAGES[$lang]}"
 }
 
-# Check if language has specific build system
 has_build_system() {
     local lang="$1"
     local build_system="$2"
@@ -99,7 +88,6 @@ has_build_system() {
     [[ -n "$result" && "$result" != "null" ]]
 }
 
-# Get build command for specific build system
 get_build_command() {
     local lang="$1"
     local build_system="$2"
@@ -110,7 +98,6 @@ get_build_command() {
     [[ "$result" != "null" ]] && echo "$result"
 }
 
-# Get run command for language
 get_run_command() {
     local lang="$1"
     local config_file="$SCRIPT_DIR/config/languages.json"

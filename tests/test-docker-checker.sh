@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Test script for docker-checker.sh functions
-# Standardized sourcing pattern for tests
-
-# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Source dependencies in correct order
 source "$SCRIPT_DIR/utils/ui-helpers.sh"
 source "$SCRIPT_DIR/utils/docker-checker.sh"
 
@@ -14,7 +9,6 @@ print_header
 print_info "Testing Docker checker functions..."
 echo
 
-# Test function existence thoroughly
 print_step "Testing function availability"
 functions_to_test="check_docker_system check_docker_installation check_docker_daemon"
 
@@ -36,18 +30,15 @@ fi
 print_success "All Docker checker functions loaded"
 echo
 
-# Test Docker command availability
 print_step "Testing Docker command availability"
 if command -v docker &> /dev/null; then
     print_success "Docker command is available"
     
-    # Get Docker version info
     docker_version=$(docker --version 2>/dev/null)
     if [[ -n "$docker_version" ]]; then
         print_info "Docker version: $docker_version"
     fi
     
-    # Test daemon status
     print_step "Testing Docker daemon status"
     if docker info &> /dev/null; then
         print_success "Docker daemon is running"
@@ -58,7 +49,6 @@ if command -v docker &> /dev/null; then
         print_info "Start Docker with: sudo systemctl start docker"
     fi
     
-    # Test Docker permissions (Linux specific)
     print_step "Testing Docker permissions"
     if docker ps &> /dev/null; then
         print_success "Docker permissions are correct"
@@ -68,6 +58,16 @@ if command -v docker &> /dev/null; then
     fi
     
 else
+    print_warning "Docker is not installed"
+    print_info "Install Docker from: https://docs.docker.com/get-docker/"
+fi
+
+echo
+print_step "Testing error handling"
+print_info "Docker checker functions will exit on errors (cannot test without breaking script)"
+print_info "Manual test: Run 'check_docker_system' when Docker is not available"
+
+print_success "Docker checker tests completed successfully"
     print_warning "Docker is not installed"
     print_info "Install Docker from: https://docs.docker.com/get-docker/"
 fi
