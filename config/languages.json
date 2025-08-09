@@ -1,0 +1,46 @@
+{
+  "languages": {
+    "go": {
+      "name": "Go",
+      "extensions": [".go"],
+      "docker_image": "golang:alpine",
+      "detection": {
+        "required_files": ["*.go"],
+        "optional_files": ["go.mod", "go.sum"]
+      },
+      "build": {
+        "with_modules": "go mod tidy && go build -o app .",
+        "without_modules": "go build -o app *.go"
+      },
+      "run": "./app"
+    },
+    "rust": {
+      "name": "Rust",
+      "extensions": [".rs"],
+      "docker_image": "rust:alpine",
+      "detection": {
+        "required_files": ["*.rs"],
+        "optional_files": ["Cargo.toml", "Cargo.lock"]
+      },
+      "build": {
+        "with_cargo": "cargo build --release && cp target/release/* app 2>/dev/null || find target/release -maxdepth 1 -type f -executable -exec cp {} app \\;",
+        "without_cargo": "rustc -o app main.rs"
+      },
+      "run": "./app"
+    },
+    "c": {
+      "name": "C",
+      "extensions": [".c", ".h"],
+      "docker_image": "gcc:alpine",
+      "detection": {
+        "required_files": ["*.c"],
+        "optional_files": ["Makefile", "*.h"]
+      },
+      "build": {
+        "with_makefile": "make && cp * app 2>/dev/null || find . -maxdepth 1 -type f -executable -exec cp {} app \\;",
+        "without_makefile": "gcc -o app *.c"
+      },
+      "run": "./app"
+    }
+  }
+}
