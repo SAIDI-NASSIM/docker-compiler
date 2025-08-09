@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Self-sufficient config loader - no external dependencies needed
+
 declare -A LANGUAGES
 declare -A LANGUAGE_NAMES
 declare -A LANGUAGE_EXTENSIONS
