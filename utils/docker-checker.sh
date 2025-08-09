@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Source UI helpers for print functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/ui-helpers.sh"
+# Note: ui-helpers.sh is sourced by main.sh before this file
+# No need to source it again here
 
 # Main Docker system check
 check_docker_system() {

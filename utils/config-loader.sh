@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# Self-sufficient config loader - no external dependencies needed
+# Self-sufficient config loader
+# Note: SCRIPT_DIR is set by main.sh before sourcing this file
 
 declare -A LANGUAGES
 declare -A LANGUAGE_NAMES
 declare -A LANGUAGE_EXTENSIONS
 declare -A LANGUAGE_DOCKER_IMAGES
-
-# Set SCRIPT_DIR if not already set (for when this script is sourced)
-if [[ -z "$SCRIPT_DIR" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-fi
 
 # Check if jq is installed
 check_jq() {

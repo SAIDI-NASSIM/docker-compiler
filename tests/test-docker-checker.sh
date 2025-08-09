@@ -1,8 +1,13 @@
 #!/bin/bash
 
 # Test script for docker-checker.sh functions
+# Standardized sourcing pattern for tests
 
+# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Source dependencies in correct order
+source "$SCRIPT_DIR/utils/ui-helpers.sh"
 source "$SCRIPT_DIR/utils/docker-checker.sh"
 
 print_header

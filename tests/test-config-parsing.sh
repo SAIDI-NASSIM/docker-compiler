@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Test script for config-loader.sh JSON parsing functionality
+# Standardized sourcing pattern for tests
 
-# Set up the script directory path (parent of tests directory)
+# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export SCRIPT_DIR
 
 echo "=== Testing Configuration Parsing ==="
 echo "Using SCRIPT_DIR: $SCRIPT_DIR"
@@ -20,7 +20,7 @@ fi
 
 echo "✓ Configuration file found: $config_file"
 
-# Source config loader
+# Source config loader (no need to export SCRIPT_DIR, it's already set)
 if [[ -f "$SCRIPT_DIR/utils/config-loader.sh" ]]; then
     source "$SCRIPT_DIR/utils/config-loader.sh"
 else

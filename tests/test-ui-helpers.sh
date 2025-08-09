@@ -1,8 +1,12 @@
 #!/bin/bash
 
 # Test script for ui-helpers.sh functions
+# Standardized sourcing pattern for tests
 
+# Get script directory (parent of tests directory)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Source only what we need for this test
 source "$SCRIPT_DIR/utils/ui-helpers.sh"
 
 print_header
