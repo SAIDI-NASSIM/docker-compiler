@@ -2,7 +2,6 @@
 
 declare -A LANGUAGES
 declare -A LANGUAGE_NAMES
-declare -A LANGUAGE_EXTENSIONS
 declare -A LANGUAGE_DOCKER_IMAGES
 
 check_jq() {
@@ -30,14 +29,8 @@ load_configurations() {
         return 1
     fi
     
-    extract_language_configs "$languages_file"
-}
-
-extract_language_configs() {
-    local config_file="$1"
-    
     local lang_keys
-    lang_keys=$(jq -r '.languages | keys[]' "$config_file" 2>/dev/null)
+    lang_keys=$(jq -r '.languages | keys[]' "$languages_file" 2>/dev/null)
     
     if [[ -z "$lang_keys" ]]; then
         echo "ERROR: No languages found in configuration file" >&2
@@ -48,14 +41,8 @@ extract_language_configs() {
         [[ -z "$lang_key" ]] && continue
         
         LANGUAGES["$lang_key"]="true"
-        
-        LANGUAGE_NAMES["$lang_key"]=$(jq -r ".languages.${lang_key}.name" "$config_file")
-        
-        local extensions
-        extensions=$(jq -r ".languages.${lang_key}.extensions[]" "$config_file" 2>/dev/null | tr '\n' ' ')
-        LANGUAGE_EXTENSIONS["$lang_key"]="${extensions% }"
-        
-        LANGUAGE_DOCKER_IMAGES["$lang_key"]=$(jq -r ".languages.${lang_key}.docker_image" "$config_file")
+        LANGUAGE_NAMES["$lang_key"]=$(jq -r ".languages.${lang_key}.name" "$languages_file")
+        LANGUAGE_DOCKER_IMAGES["$lang_key"]=$(jq -r ".languages.${lang_key}.docker_image" "$languages_file")
     done <<< "$lang_keys"
 }
 
@@ -66,11 +53,6 @@ get_available_languages() {
 get_language_name() {
     local lang="$1"
     echo "${LANGUAGE_NAMES[$lang]}"
-}
-
-get_language_extensions() {
-    local lang="$1"
-    echo "${LANGUAGE_EXTENSIONS[$lang]}"
 }
 
 get_language_docker_image() {
@@ -105,4 +87,25 @@ get_run_command() {
     local result
     result=$(jq -r ".languages.${lang}.run // empty" "$config_file" 2>/dev/null)
     [[ "$result" != "null" ]] && echo "$result"
+}
+
+get_language_required_files() {
+    local lang="$1"
+    local config_file="$SCRIPT_DIR/config/languages.json"
+    
+    jq -r ".languages.${lang}.detection.required_files[]? // empty" "$config_file" 2>/dev/null | tr '\n' ' '
+}
+
+get_language_search_depth() {
+    local lang="$1"
+    local config_file="$SCRIPT_DIR/config/languages.json"
+    
+    jq -r ".languages.${lang}.detection.search_depth // 5" "$config_file" 2>/dev/null
+}
+
+get_language_exclude_paths() {
+    local lang="$1"
+    local config_file="$SCRIPT_DIR/config/languages.json"
+    
+    jq -r ".languages.${lang}.detection.exclude_paths[]? // empty" "$config_file" 2>/dev/null | tr '\n' ' '
 }

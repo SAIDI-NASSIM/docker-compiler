@@ -105,36 +105,4 @@ else
 fi
 echo
 
-print_step "Testing has_files_with_extensions"
-if has_files_with_extensions "$TEST_DIR/testdir" ".go .rs"; then
-    print_success "has_files_with_extensions finds existing extensions"
-else
-    print_error "has_files_with_extensions failed to find existing extensions"
-fi
-
-if has_files_with_extensions "$TEST_DIR/testdir" ".py"; then
-    print_success "has_files_with_extensions finds single existing extension"
-else
-    print_error "has_files_with_extensions failed to find single existing extension"
-fi
-
-if has_files_with_extensions "$TEST_DIR/testdir" ".js .php"; then
-    print_error "has_files_with_extensions should not find non-existent extensions"
-else
-    print_success "has_files_with_extensions correctly doesn't find non-existent extensions"
-fi
-
-if has_files_with_extensions "$TEST_DIR/empty" ".go .rs"; then
-    print_error "has_files_with_extensions should fail with empty directory"
-else
-    print_success "has_files_with_extensions correctly fails with empty directory"
-fi
-
-if has_files_with_extensions "$TEST_DIR/nonexistent" ".go"; then
-    print_error "has_files_with_extensions should fail with non-existent directory"
-else
-    print_success "has_files_with_extensions correctly fails with non-existent directory"
-fi
-echo
-
 print_success "File utility tests completed successfully"

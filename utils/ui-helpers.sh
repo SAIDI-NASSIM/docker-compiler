@@ -37,20 +37,6 @@ print_info() {
     echo -e "${PURPLE}[INFO]${NC} $1"
 }
 
-ask_yes_no() {
-    local question="$1"
-    local response
-    while true; do
-        echo -n -e "${YELLOW}$question (y/n): ${NC}"
-        read -r response
-        case $response in
-            [Yy]* ) return 0;;
-            [Nn]* ) return 1;;
-            * ) echo "Please answer yes (y) or no (n).";;
-        esac
-    done
-}
-
 print_output_header() {
     echo -e "${CYAN}--- Program Output ---${NC}"
 }

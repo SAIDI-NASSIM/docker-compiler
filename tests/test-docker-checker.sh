@@ -68,14 +68,3 @@ print_info "Docker checker functions will exit on errors (cannot test without br
 print_info "Manual test: Run 'check_docker_system' when Docker is not available"
 
 print_success "Docker checker tests completed successfully"
-    print_warning "Docker is not installed"
-    print_info "Install Docker from: https://docs.docker.com/get-docker/"
-fi
-
-echo
-print_step "Testing error handling"
-# Test that functions would exit on error (we can't actually test exit)
-print_info "Docker checker functions will exit on errors (cannot test without breaking script)"
-print_info "Manual test: Run 'check_docker_system' when Docker is not available"
-
-print_success "Docker checker tests completed successfully"

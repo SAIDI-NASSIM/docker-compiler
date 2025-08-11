@@ -73,16 +73,14 @@ for lang in $available_langs; do
     echo "Language: $lang"
     
     name=$(get_language_name "$lang")
-    extensions=$(get_language_extensions "$lang")
     docker_image=$(get_language_docker_image "$lang")
     run_cmd=$(get_run_command "$lang")
     
     echo "  Name: ${name:-'(missing)'}"
-    echo "  Extensions: ${extensions:-'(missing)'}"
     echo "  Docker Image: ${docker_image:-'(missing)'}"
     echo "  Run Command: ${run_cmd:-'(missing)'}"
     
-    if [[ -z "$name" || -z "$extensions" || -z "$docker_image" ]]; then
+    if [[ -z "$name" || -z "$docker_image" ]]; then
         echo "✗ Missing required fields for $lang"
         exit 1
     fi
@@ -156,13 +154,6 @@ for lang in $available_langs; do
         echo "  ✓ Has name field"
     else
         echo "  ✗ Missing name field"
-        exit 1
-    fi
-    
-    if jq -e ".languages.${lang}.extensions" "$config_file" >/dev/null 2>&1; then
-        echo "  ✓ Has extensions field"
-    else
-        echo "  ✗ Missing extensions field"
         exit 1
     fi
     

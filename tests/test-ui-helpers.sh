@@ -22,7 +22,7 @@ print_output_footer
 echo
 
 print_step "Testing function availability"
-functions_to_test="print_header print_step print_success print_error print_warning print_info ask_yes_no print_output_header print_output_footer"
+functions_to_test="print_header print_step print_success print_error print_warning print_info print_output_header print_output_footer"
 
 all_exist=true
 for func in $functions_to_test; do
@@ -61,14 +61,4 @@ else
     exit 1
 fi
 
-print_info "Note: ask_yes_no function requires manual testing with user input"
-print_success "UI helper tests completed successfully"
-if $colors_exist; then
-    print_success "All color variables are defined"
-else
-    print_error "Some color variables are missing"
-    exit 1
-fi
-
-print_info "Note: ask_yes_no function requires manual testing with user input"
 print_success "UI helper tests completed successfully"

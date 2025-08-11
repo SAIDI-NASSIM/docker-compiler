@@ -6,7 +6,9 @@
       "docker_image": "golang:alpine",
       "detection": {
         "required_files": ["*.go"],
-        "optional_files": ["go.mod", "go.sum"]
+        "optional_files": ["go.mod", "go.sum"],
+        "search_depth": 5,
+        "exclude_paths": ["vendor", "node_modules", ".git", "build", "dist"]
       },
       "build": {
         "with_modules": "go mod tidy && go build -o app .",
@@ -20,7 +22,9 @@
       "docker_image": "rust:alpine",
       "detection": {
         "required_files": ["*.rs"],
-        "optional_files": ["Cargo.toml", "Cargo.lock"]
+        "optional_files": ["Cargo.toml", "Cargo.lock"],
+        "search_depth": 5,
+        "exclude_paths": ["target", "build", "dist", ".git", "node_modules"]
       },
       "build": {
         "with_cargo": "cargo build --release && cp target/release/* app 2>/dev/null || find target/release -maxdepth 1 -type f -executable -exec cp {} app \\;",
@@ -34,7 +38,9 @@
       "docker_image": "gcc:bookworm",
       "detection": {
         "required_files": ["*.c"],
-        "optional_files": ["Makefile", "*.h"]
+        "optional_files": ["Makefile", "*.h"],
+        "search_depth": 5,
+        "exclude_paths": ["build", "dist", ".git", "node_modules", "obj", "bin"]
       },
       "build": {
         "with_makefile": "make && cp * app 2>/dev/null || find . -maxdepth 1 -type f -executable -exec cp {} app \\;",
